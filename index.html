@@ -35,6 +35,7 @@ function sendReport(type) {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ name: name, type: type })
+    mode: 'no-cors' 
   })
   .then(response => {
     if (!response.ok) throw new Error('送信失敗');
