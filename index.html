@@ -25,8 +25,7 @@
 </table>
 
 <script>
-const scriptURL = 'https://script.google.com/a/macros/e.osakamanabi.jp/s/AKfycbzTsOxb3__8lr6OOIVCOEkjKdBDh0XbPIEHZbQmn3tyz0bd5MT5tP-yotSdcjvbFKM9dA/exec';
-
+const scriptURL = 'https://script.google.com/macros/s/AKfycbyGlQGqI2j9V8Oa-99Boi6KYOvUX0eE4OOjId4Jvv4tD3O2BAI1zADxJsv2ZPT7V-fd/exec';
 
 function sendReport(type) {
   const name = document.getElementById("nameInput").value.trim();
@@ -47,7 +46,6 @@ function sendReport(type) {
   });
 }
 
-
 function loadReports() {
   fetch(scriptURL)
     .then(response => response.json())
@@ -66,12 +64,9 @@ function loadReports() {
     });
 }
 
-
 // ページ読み込み時に読み込む
 loadReports();
 </script>
 
-
 </body>
 </html>
-
