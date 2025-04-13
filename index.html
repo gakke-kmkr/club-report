@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>報告チェックボード</title>
+  <style>
+    body { font-family: sans-serif; margin: 20px; }
+    table { border-collapse: collapse; width: 100%; margin-top: 20px; }
+    th, td { border: 1px solid #ccc; padding: 8px; text-align: center; }
+    th { background: #f0f0f0; }
+  </style>
+</head>
+<body>
+
+<h2>報告チェックボード</h2>
+<label>名前：<input type="text" id="nameInput" placeholder="名前を入力"></label>
+<button onclick="sendReport('開始')">開始報告</button>
+<button onclick="sendReport('終了')">終了報告</button>
+
+<table>
+  <thead>
+    <tr><th>日付</th><th>時刻</th><th>名前</th><th>報告種別</th></tr>
+  </thead>
+  <tbody id="reportTableBody"></tbody>
+</table>
+
+<script>
+const scriptURL = 'https://script.google.com/a/macros/e.osakamanabi.jp/s/AKfycbzTsOxb3__8lr6OOIVCOEkjKdBDh0XbPIEHZbQmn3tyz0bd5MT5tP-yotSdcjvbFKM9dA/exec';
+
+
+function sendReport(type) {
+  const name = document.getElementById("nameInput").value.trim();
+  if (!name) return alert("名前を入力してください");
+
+  fetch(scriptURL, {
+    method: 'POST',
+    body: JSON.stringify({ name: name, type: type }),
+    headers: { 'Content-Type': 'application/json' }
+  })
+  .then(() => {
+    alert("報告を送信しました！");
+    loadReports(); // 表示更新
+  })
+  .catch(error => {
+    console.error('送信エラー:', error);
+    alert("送信に失敗しました。");
+  });
+}
+
+
+function loadReports() {
+  fetch(scriptURL)
+    .then(response => response.json())
+    .then(data => {
+      const tbody = document.getElementById("reportTableBody");
+      tbody.innerHTML = "";
+      data.slice(1).reverse().forEach(row => {
+        const tr = document.createElement("tr");
+        row.forEach(cell => {
+          const td = document.createElement("td");
+          td.textContent = cell;
+          tr.appendChild(td);
+        });
+        tbody.appendChild(tr);
+      });
+    });
+}
+
+
+// ページ読み込み時に読み込む
+loadReports();
+</script>
+
+
+</body>
+</html>
+
