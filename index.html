@@ -25,7 +25,7 @@
 </table>
 
 <script>
-const scriptURL = 'https://script.google.com/macros/s/AKfycbyGlQGqI2j9V8Oa-99Boi6KYOvUX0eE4OOjId4Jvv4tD3O2BAI1zADxJsv2ZPT7V-fd/exec';
+const scriptURL = 'https://script.google.com/macros/s/AKfycb________YOUR_DEPLOYED_URL_HERE________/exec';
 
 function sendReport(type) {
   const name = document.getElementById("nameInput").value.trim();
@@ -33,12 +33,16 @@ function sendReport(type) {
 
   fetch(scriptURL, {
     method: 'POST',
-    body: JSON.stringify({ name: name, type: type }),
-    headers: { 'Content-Type': 'application/json' }
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ name: name, type: type })
+  })
+  .then(response => {
+    if (!response.ok) throw new Error('送信失敗');
+    return response.json();
   })
   .then(() => {
     alert("報告を送信しました！");
-    loadReports(); // 表示更新
+    loadReports();
   })
   .catch(error => {
     console.error('送信エラー:', error);
@@ -48,7 +52,10 @@ function sendReport(type) {
 
 function loadReports() {
   fetch(scriptURL)
-    .then(response => response.json())
+    .then(response => {
+      if (!response.ok) throw new Error('読み込み失敗');
+      return response.json();
+    })
     .then(data => {
       const tbody = document.getElementById("reportTableBody");
       tbody.innerHTML = "";
@@ -61,10 +68,13 @@ function loadReports() {
         });
         tbody.appendChild(tr);
       });
+    })
+    .catch(error => {
+      console.error('読み込みエラー:', error);
     });
 }
 
-// ページ読み込み時に読み込む
+// ページ読み込み時に表示を更新
 loadReports();
 </script>
 
